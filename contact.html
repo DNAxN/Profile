@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ติดต่อ</title>
+  <style>
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #004080;
+      color: white;
+      padding: 15px 30px;
+    }
+
+    nav a {
+      margin-right: 15px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 40px;
+      background-color: #f9f9f9; /* เหมือน body */
+    }
+
+    h1, h2 {
+      color: #004080;
+    }
+
+    form {
+      max-width: 600px;
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #004080;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[disabled] {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ติดต่อเรา</h1>
+    <nav>
+      <a href="./index.html">หน้าแรก</a>
+      <a href="./contact.html">ติดต่อ</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>แสดงความคิดเห็น</h2>
+    <form id="feedbackForm" onsubmit="return handleSubmit(event)">
+      <label for="name">ชื่อ-นามสกุล:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="address">E-mail:</label>
+      <input type="text" id="email" name="email" required>
+
+      <label for="likes">เบอร์โทรศัพท์:</label>
+      <input type="text" id="phone" name="phone" required>
+
+      <label for="comment">ความคิดเห็น:</label>
+      <textarea id="comment" name="comment" rows="4" required></textarea>
+
+      <label style="margin-top: 20px;">
+        <input type="checkbox" id="agree" onchange="toggleSubmit()"> ยอมรับเงื่อนไข
+      </label>
+
+      <button type="submit" id="submitBtn" disabled>ส่งความคิดเห็น</button>
+    </form>
+
+    <div id="output"></div>
+  </main>
+
+  <footer>
+    <p><strong>ชื่อ:</strong> จิรพนธ์ ม่วงพรวน</p>
+    <p><strong>E-mail:</strong> ice.jirapon@gmail.com</p>
+    <p><strong>เบอร์โทรศัพท์:</strong> 082-2527019</p>
+  </footer>
+
+  <script>
+    function toggleSubmit() {
+      const checkbox = document.getElementById('agree');
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = !checkbox.checked;
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      if (!document.getElementById('agree').checked) {
+        alert('กรุณายอมรับเงื่อนไขก่อนส่งความคิดเห็น');
+        return false;
+      }
+
+      const data = {
+        "ชื่อ-นามสกุล": document.getElementById('name').value,
+        "E-mail": document.getElementById('email').value,
+        "เบอร์โทรศัพท์": document.getElementById('phone').value,
+        "ความคิดเห็น": document.getElementById('comment').value
+      };
+
+      let textOutput = '';
+      for (let key in data) {
+        textOutput += `${key}: ${data[key]}\n`;
+      }
+
+      document.getElementById('output').textContent = "ข้อมูลที่คุณกรอก:\n\n" + textOutput;
+
+      const blob = new Blob([textOutput], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ความคิดเห็น.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      return false;
+    }
+  </script>
+
+</body>
+</html>
